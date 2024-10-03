@@ -5,6 +5,8 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Camera = game:GetService("Workspace").CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
+local Icons = require(Root.Icons).assets
+local Debug = require(Root.Debug).debug
 
 local Root = script
 local Creator = require(Root.Creator)
@@ -14,7 +16,7 @@ local Components = Root.Components
 local NotificationModule = require(Components.Notification)
 
 local New = Creator.New
-
+Debug.log('test')
 local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 local GUI = New("ScreenGui", {
 	Parent = RunService:IsStudio() and LocalPlayer.PlayerGui or game:GetService("CoreGui"),
@@ -79,7 +81,6 @@ function Library:Round(Number, Factor)
 	return Number:find("%.") and tonumber(Number:sub(1, Number:find("%.") + Factor)) or Number
 end
 
-local Icons = require(Root.Icons).assets
 function Library:GetIcon(Name)
 	if Name ~= nil and Icons["lucide-" .. Name] then
 		return Icons["lucide-" .. Name]
