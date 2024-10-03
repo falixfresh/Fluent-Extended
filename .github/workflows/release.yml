@@ -48,21 +48,6 @@ jobs:
         # Проверяем, что скомпилированные файлы есть
         ls dist/
 
-    # Шаг 7: Создаем тег для релиза
-    - name: Create GitHub Tag
-      id: create_tag
-      run: |
-        # Извлекаем текущую версию из файла package.json (при наличии)
-        VERSION=$(cat package.json | grep '"version"' | sed -E 's/.*"version": "(.*)".*/\1/')
-        if [ -z "$VERSION" ]; then
-          VERSION="v1.0.0" # Если версия не найдена, используем v1.0.0
-        fi
-        # Создаем тег с текущей версией
-        git tag $VERSION
-        git push origin $VERSION
-        echo "Created tag $VERSION"
-        echo "version=$VERSION" >> $GITHUB_ENV
-
     # Шаг 8: Загружаем артефакты релиза (main.rbxm и main.lua)
     - name: Upload Release Assets
       uses: actions/upload-artifact@v3
