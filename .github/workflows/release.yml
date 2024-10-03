@@ -47,8 +47,22 @@ jobs:
         lune build
         # Проверяем, что скомпилированные файлы есть
         ls dist/
-        
-    # Шаг 7: Загружаем артефакты релиза (main.rbxm и main.lua)
+
+    # Шаг 7: Создаем тег для релиза
+    - name: Create GitHub Tag
+      id: create_tag
+      run: |
+        # Извлекаем текущую версию из файла package.json (при наличии)
+        VERSION=$(cat package.json | grep '"version"' | sed -E 's/.*"version": "(.*)".*/\1/')
+        if [ -z "$VERSION" ]; then
+          VERSION="v1.0.0" # Если версия не найдена, используем v1.0.0
+        fi
+        # Создаем тег с текущей версией
+        git tag $VERSION
+        git push origin $VERSION
+        echo "Created tag $VERSION"
+
+    # Шаг 8: Загружаем артефакты релиза (main.rbxm и main.lua)
     - name: Upload Release Assets
       uses: actions/upload-artifact@v3
       with:
@@ -57,12 +71,13 @@ jobs:
           dist/main.rbxm
           dist/main.lua
 
-    # Шаг 8: Публикуем артефакты в релиз
+    # Шаг 9: Публикуем артефакты в GitHub Release
     - name: Upload to GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           dist/main.rbxm
           dist/main.lua
+        tag_name: ${{ steps.create_tag.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
