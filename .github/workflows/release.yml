@@ -3,8 +3,8 @@ name: Release
 on:
   workflow_dispatch:
   release:
-    types: [ published, prereleased ]
-    
+    types: [published, prereleased]
+
 permissions:
   contents: write
   packages: write
@@ -14,32 +14,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Шаг 1: Клонируем репозиторий
     - name: GitHub Checkout
       uses: actions/checkout@v3
 
+    # Шаг 2: Устанавливаем PNPM
     - name: Setup PNPM
       uses: pnpm/action-setup@v4
       with:
         version: 9
         run_install: true
-    
+
+    # Шаг 3: Устанавливаем Aftman
     - name: Setup Aftman
       uses: ok-nick/setup-aftman@v0.3.0
-    
+
+    # Шаг 4: Устанавливаем Rojo, Lune и DarkLua
     - name: Install Rojo, Lune and DarkLua
       run: aftman install
-        
-    - name: Build and Compile
+
+    # Шаг 5: Билдим проект с помощью Rojo
+    - name: Build and Compile with Rojo
       run: |
+        mkdir -p dist
         pnpm run rojo --verbose
-      
-    - name: Bundle Luau
-      run: pnpm run bundle
-      
+        # Выводим содержимое папки для проверки
+        ls dist/
+
+    # Шаг 6: Компилируем проект в Lua с помощью Lune
+    - name: Build Lua with Lune
+      run: |
+        lune build
+        # Проверяем, что скомпилированные файлы есть
+        ls dist/
+        
+    # Шаг 7: Загружаем артефакты релиза (main.rbxm и main.lua)
     - name: Upload Release Assets
-      uses: alexellis/upload-assets@0.4.0
-      env:
-        ACTIONS_STEP_DEBUG: true
-        GITHUB_TOKEN: ${{ github.token }}
+      uses: actions/upload-artifact@v3
       with:
-        asset_paths: '["dist/main.rbxm", "dist/main.lua"]'
+        name: release-assets
+        path: |
+          dist/main.rbxm
+          dist/main.lua
+
+    # Шаг 8: Публикуем артефакты в релиз
+    - name: Upload to GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/main.rbxm
+          dist/main.lua
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
