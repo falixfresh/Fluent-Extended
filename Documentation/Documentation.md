@@ -18,11 +18,6 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
 
---[[
-Title = <string> - The title of the UI.
-SubTitle = <string> - The subtitle of the UI.
-TabWidth = <num>, - The number of Tab Width of the UI.
-]]
 ```
 
 ## Creating a Tab
@@ -30,7 +25,7 @@ TabWidth = <num>, - The number of Tab Width of the UI.
 local Tab = Window:AddTab({
   Title = "Tab",
   Icon = ""
-}),
+})
 ```
 You can set Icon, icons are https://lucide.dev/
 
@@ -51,19 +46,41 @@ Fluent:Notify({
 
 ## Creating a Paragraph
 ```lua
-    local Paragraph = Tab:AddParagraph({
-        Title = "Paragraph",
-        Content = "This is a paragraph.\nSecond line!"
-    })
+local Paragraph = Tab:AddParagraph({
+    Title = "Paragraph",
+    Content = "This is a paragraph.\nSecond line!"
+})
 ```
 
 ## Creating a Button
 ```lua
-    local Button = Tab:AddButton({
-        Title = "Button",
-        Description = "Very important button",
-        Callback = function()
-            print('Pressed button')
-        end
-    })
+local Button = Tab:AddButton({
+    Title = "Button",
+    Description = "Very important button",
+    Callback = function()
+        print('Pressed button')
+    end
+})
 ```
+
+## Creating a Toggle
+```lua
+local Toggle = Tabs.Main:AddToggle("MyToggle", {
+    Title = "Toggle",
+    Default = false
+})
+```
+On change
+```lua
+Toggle:OnChanged(function()
+    print("Toggle changed:", Options.MyToggle.Value)
+end)
+```
+Set value
+```lua
+Options.MyToggle:SetValue(false)
+```
+
+## Creating a Slider
+```lua
+
