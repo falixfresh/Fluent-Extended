@@ -65,7 +65,7 @@ local Button = Tab:AddButton({
 
 ## Creating a Toggle
 ```lua
-local Toggle = Tabs.Main:AddToggle("MyToggle", {
+local Toggle = Tab:AddToggle("MyToggle", {
     Title = "Toggle",
     Default = false
 })
