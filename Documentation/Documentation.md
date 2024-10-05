@@ -4,6 +4,8 @@ This documentation is for the latest release of Fluent.
 ## Booting the Library
 ```lua
 local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/falixfresh/Fluent-Extended/master/latest.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 ```
 
 ## Creating a Window
@@ -65,7 +67,7 @@ local Button = Tab:AddButton({
 
 ## Creating a Toggle
 ```lua
-local Toggle = Tab:AddToggle("MyToggle", {
+local Toggle = Tabs.Main:AddToggle("MyToggle", {
     Title = "Toggle",
     Default = false
 })
